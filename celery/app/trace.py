@@ -470,9 +470,9 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                         # execute first task in chain
                         chain = task_request.chain
                         if chain:
+                            _name = request["task"]
                             _chsig = signature(chain.pop(), app=app)
-                            name = get_task_name(task_request, name)
-                            logger.info(f"[SPAM] Chaining task from {name}s[{uuid}] to {_chsig.name}s[{_chsig.id}]")
+                            logger.info(f"[SPAM] Chaining task from {_name}s[{uuid}] to {_chsig.name}s[{_chsig.id}]")
                             res = _chsig.apply_async(
                                 (retval,), chain=chain,
                                 parent_id=uuid, root_id=root_id,
