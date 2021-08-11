@@ -19,6 +19,8 @@ from celery.utils.nodenames import anon_nodename
 from celery.utils.saferepr import saferepr
 from celery.utils.text import indent as textindent
 from celery.utils.time import maybe_make_aware
+from celery.utils.log import get_logger
+
 
 from . import routes as _routes
 
