@@ -30,6 +30,8 @@ except ImportError:
 
 __all__ = ('AMQP', 'Queues', 'task_message')
 
+logger = get_logger(__name__)
+
 #: earliest date supported by time.mktime.
 INT_MIN = -2147483648
 
@@ -549,6 +551,9 @@ class AMQP(object):
                     declare=declare, headers=headers2,
                     properties=properties, retry_policy=retry_policy,
                 )
+            logger.info(f"[SPAM:celery/app/amqp.py:552] producer.publish: {body}")
+            logger.info(f"[SPAM:celery/app/amqp.py:553] producer.publish: {str(retry)} - {str(retry_policy)}")
+
             ret = producer.publish(
                 body,
                 exchange=exchange,
@@ -560,6 +565,9 @@ class AMQP(object):
                 headers=headers2,
                 **properties
             )
+
+            logger.info(f"[SPAM:celery/app/amqp.py:567] {ret}")
+
             if after_receivers:
                 send_after_publish(sender=name, body=body, headers=headers2,
                                    exchange=exchange, routing_key=routing_key)

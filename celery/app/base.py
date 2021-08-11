@@ -699,6 +699,7 @@ class Celery(object):
         producer = producer or publisher  # XXX compat
         router = router or amqp.router
         conf = self.conf
+        logger.info(f"[SPAM] Preparing to send task with name {name} [{task_id}]")
         if conf.task_always_eager:  # pragma: no cover
             warnings.warn(AlwaysEagerIgnored(
                 'task_always_eager has no effect on send_task',
@@ -730,6 +731,9 @@ class Celery(object):
             argsrepr=options.get('argsrepr'),
             kwargsrepr=options.get('kwargsrepr'),
         )
+
+        logger.info(f"[SPAM] {type(amqp)}")
+        logger.info(f"[SPAM] AMQP Message: {str(message)}")
 
         if connection:
             producer = amqp.Producer(connection, auto_declare=False)

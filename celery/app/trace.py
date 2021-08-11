@@ -472,14 +472,16 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                         if chain:
                             _name = request["task"]
                             _chsig = signature(chain.pop(), app=app)
-                            logger.info(f"[SPAM] Chaining task from {_name}s[{uuid}] to {_chsig.name}s[{_chsig.id}]")
+                            logger.info(f"[SPAM] Chaining task from {_name}[{uuid}] to {_chsig.name}[{_chsig.id}]")
                             res = _chsig.apply_async(
                                 (retval,), chain=chain,
                                 parent_id=uuid, root_id=root_id,
                                 priority=task_priority
                             )
                             logger.info(f"[SPAM] id={res.id}, state={res.state}, status={res.status} ")
-
+                            import time
+                            time.sleep(2)
+                            logger.info(f"[SPAM] sleep 2s -> id={res.id}, state={res.state}, status={res.status} ")
                         mark_as_done(
                             uuid, retval, task_request, publish_result,
                         )
