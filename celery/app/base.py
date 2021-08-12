@@ -732,7 +732,6 @@ class Celery(object):
             kwargsrepr=options.get('kwargsrepr'),
         )
 
-        logger.info(f"[SPAM] {type(amqp)}")
         logger.info(f"[SPAM] AMQP Message: {str(message)}")
 
         if connection:

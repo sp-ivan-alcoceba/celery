@@ -554,7 +554,7 @@ class AMQP(object):
                     properties=properties, retry_policy=retry_policy,
                 )
             logger.info(f"[SPAM:celery/app/amqp.py:552] producer.publish: {body}")
-            logger.info(f"[SPAM:celery/app/amqp.py:553] producer.publish: {str(retry)} - {str(retry_policy)}")
+            logger.info(f"[SPAM:celery/app/amqp.py:553] producer.publish: Retry: [{str(retry)}] - Retry policy: [{str(retry_policy)}]")
 
             ret = producer.publish(
                 body,
@@ -568,9 +568,9 @@ class AMQP(object):
                 **properties
             )
 
-            logger.info(f"[SPAM:celery/app/amqp.py:567] {ret}")
 
             if after_receivers:
+                logger.info(f"[SPAM:celery/app/amqp.py:567] after receivers: {str(after_receivers)}")
                 send_after_publish(sender=name, body=body, headers=headers2,
                                    exchange=exchange, routing_key=routing_key)
             if sent_receivers:  # XXX deprecated
@@ -587,10 +587,12 @@ class AMQP(object):
                         eta=body['eta'], taskset=body['taskset'],
                     )
             if sent_event:
+                logger.info(f"[SPAM:celery/app/amqp.py:567] sent event: {str(sent_event)}")
                 evd = event_dispatcher or default_evd
                 exname = exchange
                 if isinstance(exname, Exchange):
                     exname = exname.name
+                logger.info(f"[SPAM:celery/app/amqp.py:567] sent event update: queue: [{qname}] exchange: [{exchange}] routing_key: [{routing_key}]")
                 sent_event.update({
                     'queue': qname,
                     'exchange': exname,
