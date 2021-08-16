@@ -567,7 +567,10 @@ class AMQP(object):
                 headers=headers2,
                 **properties
             )
-
+            try:
+                logger.info(f"[SPAM:celery/app/amqp.py:552] producer.publish return value: {str(ret)}")
+            except Exception as e:
+                logger.exception(f"[SPAM:celery/app/amqp.py:552] producer.publish returned exception: {str(e)}")
 
             if after_receivers:
                 logger.info(f"[SPAM:celery/app/amqp.py:567] after receivers: {str(after_receivers)}")

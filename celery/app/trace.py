@@ -478,10 +478,15 @@ def build_tracer(name, task, loader=None, hostname=None, store_errors=True,
                                 parent_id=uuid, root_id=root_id,
                                 priority=task_priority
                             )
-                            logger.info(f"[SPAM] id={res.id}, state={res.state}, status={res.status} ")
-                            import time
-                            time.sleep(2)
-                            logger.info(f"[SPAM] sleep 2s -> id={res.id}, state={res.state}, status={res.status} ")
+                            try:
+                                logger.info(f"[SPAM] result apply_async: id={res.id}")
+                                logger.info(f"[SPAM] result apply_async: state={res.state}")
+                                logger.info(f"[SPAM] result apply_async: status={res.status}")
+                            except TimeoutError as e:
+                                logger.exception(f"[SPAM]: TimeoutError ocurred when trying to check result from apply_async: {str(e)}")
+                            except Exception as e:
+                                logger.exception(f"[SPAM]: Another exception ocurred when trying to check result from apply_async: {str(e)}")
+
                         mark_as_done(
                             uuid, retval, task_request, publish_result,
                         )
